@@ -1,10 +1,11 @@
 [package]
 name = "exun"
 version = "0.1.0"
+authors = ["Mica White <botahamec@outlook.com>"]
 edition = "2021"
 rust-version = "1.56"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Handle unexpected errors"
+license = "Unlicense"
 
 [features]
 default = ["std"]
