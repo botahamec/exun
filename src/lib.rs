@@ -187,10 +187,7 @@ impl<E, U> Expect<E, U> {
 	///
 	/// Because this function may panic, its use is generally discouraged.
 	/// Instead, prefer to use pattern matching and handle the [`Unexpected`]
-	/// case explicitly, or use [`unwrap_or`] or [`unwrap_or_else`].
-	///
-	/// [`unwrap_or`]: Expect::unwrap_or
-	/// [`unwrap_or_else`]: Expect::unwrap_or_else
+	/// case explicitly.
 	///
 	/// # Panics
 	///
@@ -258,58 +255,6 @@ impl<E, U> Expect<E, U> {
 				e
 			),
 			Unexpected(u) => u,
-		}
-	}
-
-	/// Returns the contained [`Expected`] value, or a provided default.
-	///
-	/// Arguments passed to `unwrap_or` are eagerly evaluated; if you are
-	/// passing the result of a function call, it is recommended to use
-	/// [`unwrap_or_else`], which is lazily evaluated.
-	///
-	/// [`unwrap_or_else`]: Expect::unwrap_or_else
-	///
-	/// # Examples
-	///
-	/// Basic usage:
-	///
-	/// ```
-	/// use exun::*;
-	///
-	/// let default = 2;
-	/// let x: Expect<u32, &str> = Expected(9);
-	/// assert_eq!(x.unwrap_or(default), 9);
-	///
-	/// let x: Expect<u32, &str> = Unexpected("unexpected");
-	/// assert_eq!(x.unwrap_or(default), 2);
-	/// ```
-	#[allow(clippy::missing_const_for_fn)]
-	pub fn unwrap_or(self, default: E) -> E {
-		match self {
-			Expected(e) => e,
-			Unexpected(_) => default,
-		}
-	}
-
-	/// Returns the contained [`Expected`] value, or computes it from a
-	/// closure.
-	///
-	/// # Examples
-	///
-	/// Basic usage:
-	///
-	/// ```
-	/// use exun::*;
-	///
-	/// fn count(x: &str) -> usize { x.len() }
-	///
-	/// assert_eq!(Expected(2).unwrap_or_else(count), 2);
-	/// assert_eq!(Unexpected("foo").unwrap_or_else(count), 3);
-	/// ```
-	pub fn unwrap_or_else<F: FnOnce(U) -> E>(self, op: F) -> E {
-		match self {
-			Expected(e) => e,
-			Unexpected(u) => op(u),
 		}
 	}
 }
