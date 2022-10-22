@@ -5,6 +5,7 @@ authors = ["Mica White <botahamec@outlook.com>"]
 edition = "2018"
 rust-version = "1.31"
 description = "Handle unexpected errors"
+readme = "README.md"
 documentation = "https://docs.rs/exun"
 repository = "https://github.com/botahamec/exun/"
 license-file = "LICENSE.md"
