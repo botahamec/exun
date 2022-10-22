@@ -2,8 +2,8 @@
 name = "exun"
 version = "0.1.0"
 authors = ["Mica White <botahamec@outlook.com>"]
-edition = "2021"
-rust-version = "1.60"
+edition = "2018"
+rust-version = "1.41.1"
 description = "Handle unexpected errors"
 readme = "README.md"
 documentation = "https://docs.rs/exun"
@@ -11,6 +11,9 @@ repository = "https://github.com/botahamec/exun/"
 license-file = "LICENSE.md"
 keywords = ["no_std", "no-std", "utility", "error", "error-handling"]
 categories = ["rust-patterns", "no-std"]
+
+[package.metadata]
+msrv = "1.41.1"
 
 [features]
 default = ["std"]
