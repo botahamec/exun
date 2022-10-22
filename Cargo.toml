@@ -7,7 +7,6 @@ rust-version = "1.31"
 description = "Handle unexpected errors"
 documentation = "https://docs.rs/exun"
 repository = "https://github.com/botahamec/exun/"
-license = "Unlicense"
 license-file = "LICENSE.md"
 keywords = ["no_std", "no-std", "utility", "error", "error-handling"]
 categories = ["rust-patterns", "no-std"]
