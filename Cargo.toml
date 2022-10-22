@@ -2,8 +2,8 @@
 name = "exun"
 version = "0.1.0"
 authors = ["Mica White <botahamec@outlook.com>"]
-edition = "2018"
-rust-version = "1.31"
+edition = "2021"
+rust-version = "1.60"
 description = "Handle unexpected errors"
 readme = "README.md"
 documentation = "https://docs.rs/exun"
