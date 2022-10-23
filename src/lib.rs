@@ -1,6 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(clippy::nursery)]
 #![warn(clippy::pedantic)]
+#![warn(clippy::cargo)]
 #![allow(clippy::module_name_repetitions)]
 //! There are many errors we don't expect to occur. But what if we're wrong? We
 //! don't want our programs to panic because of that. We also don't want to spend
