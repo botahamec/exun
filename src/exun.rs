@@ -40,6 +40,16 @@ impl<E: Error + 'static, U: Error + 'static> Error for Exun<E, U> {
 }
 
 #[cfg(feature = "std")]
+impl<E: Error + 'static> Error for Exun<E, RawUnexpected> {
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		match self {
+			Expected(ref e) => Some(e),
+			Unexpected(ref u) => u.source(),
+		}
+	}
+}
+
+#[cfg(feature = "std")]
 impl<E: Error, U> From<E> for Exun<E, U> {
 	fn from(e: E) -> Self {
 		Expected(e)
