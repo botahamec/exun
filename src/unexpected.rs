@@ -10,7 +10,6 @@ pub trait Errorable: Display + Debug + Send + Sync {}
 impl<T: Display + Debug + Send + Sync + ?Sized> Errorable for T {}
 
 #[derive(Debug)]
-#[non_exhaustive]
 enum ErrorTy {
 	Message(Box<dyn Errorable + 'static>),
 	#[cfg(feature = "std")]
