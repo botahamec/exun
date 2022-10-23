@@ -4,8 +4,7 @@ use core::fmt::{self, Debug, Display};
 use std::error::Error;
 
 #[cfg(feature = "alloc")]
-use crate::RawUnexpected;
-use crate::UnexpectedError;
+use crate::{RawUnexpected, UnexpectedError};
 
 pub use Exun::{Expected, Unexpected};
 

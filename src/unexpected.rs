@@ -60,9 +60,9 @@ impl RawUnexpected {
 	/// let x = RawUnexpected::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
-	pub fn new<E: Error + Send + Sync + 'static>(e: E) -> Self {
+	pub fn new<E: Error + Send + Sync + 'static>(error: E) -> Self {
 		Self {
-			internal: ErrorTy::Error(Box::new(e)),
+			internal: ErrorTy::Error(Box::new(error)),
 		}
 	}
 
@@ -80,9 +80,9 @@ impl RawUnexpected {
 	///
 	/// let x = RawUnexpected::msg("failed");
 	/// ```
-	pub fn msg<E: Display + Debug + Send + Sync + 'static>(e: E) -> Self {
+	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
 		Self {
-			internal: ErrorTy::Message(Box::new(e)),
+			internal: ErrorTy::Message(Box::new(error)),
 		}
 	}
 
@@ -105,6 +105,7 @@ impl RawUnexpected {
 	/// assert!(x.source().is_none());
 	/// ```
 	#[must_use]
+	#[cfg(feature = "std")]
 	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match &self.internal {
 			ErrorTy::Message(_) => None,
@@ -120,6 +121,45 @@ impl RawUnexpected {
 /// `From<Error>`. If that's something you need, try [`RawUnexpected`].
 #[derive(Debug)]
 pub struct UnexpectedError(RawUnexpected);
+
+impl UnexpectedError {
+	/// Create a new `UnexpectedError` from any [`Error`] type.
+	///
+	/// The error must be thread-safe and `'static` so that the
+	/// `UnexpectedError` will be too.
+	///
+	/// # Examples
+	///
+	/// Basic usage:
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let x = UnexpectedError::new(core::fmt::Error);
+	/// ```
+	#[cfg(feature = "std")]
+	pub fn new<E: Error + Send + Sync + 'static>(error: E) -> Self {
+		Self(RawUnexpected::new(error))
+	}
+
+	/// Create a new `UnexpectedError` from a printable error message.
+	///
+	/// If the argument implements [`Error`], prefer [`UnexpectedError::new`]
+	/// instead, which preserves the source.
+	///
+	/// # Examples
+	///
+	/// Basic usage:
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let x = UnexpectedError::msg("failed");
+	/// ```
+	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
+		Self(RawUnexpected::msg(error))
+	}
+}
 
 impl From<RawUnexpected> for UnexpectedError {
 	fn from(ru: RawUnexpected) -> Self {
