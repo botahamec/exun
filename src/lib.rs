@@ -2,6 +2,7 @@
 #![warn(clippy::nursery)]
 #![warn(clippy::pedantic)]
 #![allow(clippy::module_name_repetitions)]
+#![doc = include_str!("../README.md")]
 
 #[cfg(all(feature = "alloc", not(feature = "std")))]
 extern crate alloc;
@@ -19,3 +20,6 @@ pub use result::ResultErrorExt;
 pub use result::ResultMsgExt;
 #[cfg(feature = "alloc")]
 pub use unexpected::{RawUnexpected, UnexpectedError};
+
+#[cfg(feature = "alloc")]
+pub type Expect<E> = Exun<E, RawUnexpected>;
