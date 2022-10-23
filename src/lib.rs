@@ -143,13 +143,14 @@ mod result;
 #[cfg(feature = "alloc")]
 mod unexpected;
 
-pub use crate::exun::{Expected, Exun, Unexpected};
+pub use crate::exun::Exun;
 #[cfg(feature = "std")]
 pub use result::ResultErrorExt;
 #[cfg(feature = "alloc")]
 pub use result::ResultMsgExt;
 #[cfg(feature = "alloc")]
 pub use unexpected::{RawUnexpected, UnexpectedError};
+pub use Exun::{Expected, Unexpected};
 
 #[cfg(feature = "alloc")]
 pub type Expect<E> = Exun<E, RawUnexpected>;
