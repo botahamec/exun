@@ -8,7 +8,7 @@ use crate::{RawUnexpected, UnexpectedError};
 
 pub use Exun::{Expected, Unexpected};
 
-/// `Expect` is a type that represents either the expected error type
+/// `Exun` is a type that represents either the expected error type
 /// ([`Expected`]) or an unexpected type ([`Unexpected`]).
 ///
 /// See the [crate documentation](crate) for details.

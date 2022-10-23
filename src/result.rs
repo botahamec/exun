@@ -10,6 +10,9 @@ mod sealed {
 
 use sealed::Sealed;
 
+/// Provides [`Result::unexpect`]
+///
+/// [`Result::unexpect`]: `ResultErrorExt::unexpect`
 #[cfg(feature = "std")]
 pub trait ResultErrorExt<T>: Sealed {
 	/// Converts `Result<T, E>` to `Result<T, RawUnexpected>`.
@@ -62,6 +65,9 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 	}
 }
 
+/// Provides [`Result::unexpect_msg`]
+///
+/// [`Result::unexpect_msg`]: `ResultMsgExt::unexpect_msg`
 pub trait ResultMsgExt<T>: Sealed {
 	/// Converts `Result<T, E>` to `Result<T, RawUnExpected>`.
 	///
