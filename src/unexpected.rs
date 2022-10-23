@@ -90,7 +90,7 @@ impl UnexpectedError {
 	///
 	/// let err = UnexpectedError::msg("failed");
 	/// ```
-	pub fn msg<E: Errorable + 'static>(e: E) -> Self {
+	pub fn msg<E: Display + Debug + Send + Sync + 'static>(e: E) -> Self {
 		Self {
 			internal: ErrorTy::Message(Box::new(e)),
 		}
