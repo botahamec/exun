@@ -6,15 +6,15 @@ use alloc::boxed::Box;
 #[cfg(feature = "std")]
 use std::error::Error;
 
-pub trait Errorable: Display + Debug {}
-impl<T: Display + Debug> Errorable for T {}
+pub trait Errorable: Display + Debug + Send + Sync {}
+impl<T: Display + Debug + Send + Sync + ?Sized> Errorable for T {}
 
 #[derive(Debug)]
 #[non_exhaustive]
 enum ErrorTy {
 	Message(Box<dyn Errorable + 'static>),
 	#[cfg(feature = "std")]
-	Error(Box<dyn Error + 'static>),
+	Error(Box<dyn Error + Send + Sync + 'static>),
 }
 
 #[derive(Debug)]
@@ -43,10 +43,23 @@ impl Error for UnexpectedError {
 	}
 }
 
+impl From<&str> for UnexpectedError {
+	fn from(s: &str) -> Self {
+		String::from(s).into()
+	}
+}
+
+impl From<String> for UnexpectedError {
+	fn from(s: String) -> Self {
+		Self::msg(s)
+	}
+}
+
 impl UnexpectedError {
 	/// Create a new `UnexpectedError` from any [`Error`] type.
 	///
-	/// The error must be `'static` so that the `UnexpectedError` will be too.
+	/// The error must be thread-safe and `'static` so that the
+	/// `UnexpectedError` will be too.
 	///
 	/// # Examples
 	///
@@ -58,7 +71,7 @@ impl UnexpectedError {
 	/// let err = UnexpectedError::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
-	pub fn new<E: Error + 'static>(e: E) -> Self {
+	pub fn new<E: Error + Send + Sync + 'static>(e: E) -> Self {
 		Self {
 			internal: ErrorTy::Error(Box::new(e)),
 		}
