@@ -17,4 +17,5 @@ msrv = "1.41.1"
 
 [features]
 default = ["std"]
-std = []
+std = ["alloc"]
+alloc = []

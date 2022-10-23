@@ -1,13 +1,22 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(clippy::nursery)]
 #![warn(clippy::pedantic)]
+#![allow(clippy::module_name_repetitions)]
+
+#[cfg(all(feature = "alloc", not(feature = "std")))]
+extern crate alloc;
 
 use core::fmt::{self, Debug, Display};
 
 #[cfg(feature = "std")]
 use std::error::Error;
 
+#[cfg(feature = "alloc")]
+pub use unexpected::UnexpectedError;
 pub use Expect::{Expected, Unexpected};
+
+#[cfg(feature = "alloc")]
+mod unexpected;
 
 /// `Expect` is a type that represents either the expected error type
 /// ([`Expected`]) or an unexpected error ([`Unexpected`]).
