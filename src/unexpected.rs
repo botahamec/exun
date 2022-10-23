@@ -17,11 +17,11 @@ enum ErrorTy {
 }
 
 #[derive(Debug)]
-pub struct UnexpectedError {
+pub struct RawUnexpected {
 	internal: ErrorTy,
 }
 
-impl Display for UnexpectedError {
+impl Display for RawUnexpected {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match &self.internal {
 			ErrorTy::Message(m) => Display::fmt(&m, f),
@@ -32,17 +32,17 @@ impl Display for UnexpectedError {
 }
 
 #[cfg(feature = "std")]
-impl<T: Error + Send + Sync + 'static> From<T> for UnexpectedError {
+impl<T: Error + Send + Sync + 'static> From<T> for RawUnexpected {
 	fn from(e: T) -> Self {
 		Self::new(e)
 	}
 }
 
-impl UnexpectedError {
-	/// Create a new `UnexpectedError` from any [`Error`] type.
+impl RawUnexpected {
+	/// Create a new `RawUnexpected` from any [`Error`] type.
 	///
 	/// The error must be thread-safe and `'static` so that the
-	/// `UnexpectedError` will be too.
+	/// `RawUnexpected` will be too.
 	///
 	/// # Examples
 	///
@@ -51,7 +51,7 @@ impl UnexpectedError {
 	/// ```
 	/// use exun::*;
 	///
-	/// let err = UnexpectedError::new(core::fmt::Error);
+	/// let err = RawUnexpected::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
 	pub fn new<E: Error + Send + Sync + 'static>(e: E) -> Self {
@@ -60,9 +60,9 @@ impl UnexpectedError {
 		}
 	}
 
-	/// Create an error message from a printable error message.
+	/// Create a new `RawUnexpected` from a printable error message.
 	///
-	/// If the argument implements [`Error`], prefer [`UnexpectedError::new`]
+	/// If the argument implements [`Error`], prefer [`RawUnexpected::new`]
 	/// instead, which preserves the source.
 	///
 	/// # Examples

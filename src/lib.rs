@@ -18,4 +18,4 @@ pub use result::ResultErrorExt;
 #[cfg(feature = "alloc")]
 pub use result::ResultMsgExt;
 #[cfg(feature = "alloc")]
-pub use unexpected::UnexpectedError;
+pub use unexpected::RawUnexpected;

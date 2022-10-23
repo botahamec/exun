@@ -4,19 +4,19 @@ use core::fmt::{self, Debug, Display};
 use std::error::Error;
 
 #[cfg(feature = "alloc")]
-use crate::UnexpectedError;
+use crate::RawUnexpected;
 
 pub use Exun::{Expected, Unexpected};
 
 /// `Expect` is a type that represents either the expected error type
-/// ([`Expected`]) or an unexpected error ([`Unexpected`]).
+/// ([`Expected`]) or an unexpected type ([`Unexpected`]).
 ///
 /// See the [crate documentation](self) for details.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Exun<E, U> {
-	/// Contains the expected error type
+	/// Contains the expected type
 	Expected(E),
-	/// Contains an unexpected error
+	/// Contains an unexpected type
 	Unexpected(U),
 }
 
@@ -47,8 +47,8 @@ impl<E: Error, U> From<E> for Exun<E, U> {
 }
 
 #[cfg(feature = "alloc")]
-impl<E> From<UnexpectedError> for Exun<E, UnexpectedError> {
-	fn from(ue: UnexpectedError) -> Self {
+impl<E> From<RawUnexpected> for Exun<E, RawUnexpected> {
+	fn from(ue: RawUnexpected) -> Self {
 		Unexpected(ue)
 	}
 }
