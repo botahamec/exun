@@ -11,6 +11,7 @@ repository = "https://github.com/botahamec/exun/"
 license-file = "LICENSE.md"
 keywords = ["no_std", "no-std", "utility", "error", "error-handling"]
 categories = ["rust-patterns", "no-std"]
+exclude = [".vscode/settings.json"]
 
 [package.metadata]
 msrv = "1.41.1"
