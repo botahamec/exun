@@ -21,8 +21,8 @@
 //! * [`Expect`] is a type alias for [`Exun<E, RawUnexpected>`].
 //!
 //! * Clearly mark errors that you don't expect to occur by calling
-//! `Result::unexpect`. If the error type doesn't implement `Error`, you can still
-//! use `Result::unexpect_msg`, as long as it implements
+//! [`Result::unexpect`]. If the error type doesn't implement `Error`, you can
+//! still use [`Result::unexpect_msg`], as long as it implements
 //! `Debug + Display + Send + Sync + 'static`.
 //!
 //! ## Usage
@@ -42,10 +42,10 @@
 //! * `std`: This automatically enables `alloc`. It's used for the standard
 //! library's [`Error`] type. Using this type allows more errors to be converted
 //! into [`Exun`] and [`RawUnexpected`] errors automatically, and it's needed for
-//! `Result::unexpect`.
+//! [`Result::unexpect`].
 //!
 //! * `alloc`: This is needed for [`Expect`], [`RawUnexpected`] and
-//! [`UnexpectedError`], as well as `Result::unexpected_msg`.
+//! [`UnexpectedError`], as well as [`Result::unexpect_msg`].
 //!
 //! To disable these features:
 //!
@@ -132,7 +132,9 @@
 //! }
 //! ```
 //!
-//! [`Error`]: `std::error::Error
+//! [`Error`]: `std::error::Error`
+//! [`Result::unexpect`]: `ResultErrorExt::unexpect`
+//! [`Result::unexpect_msg`]: `ResultMsgExt::unexpect_msg`
 //!
 
 #[cfg(all(feature = "alloc", not(feature = "std")))]
