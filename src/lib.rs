@@ -8,6 +8,8 @@ extern crate alloc;
 
 mod exun;
 #[cfg(feature = "alloc")]
+mod result;
+#[cfg(feature = "alloc")]
 mod unexpected;
 
 pub use exun::*;
