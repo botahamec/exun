@@ -1,7 +1,7 @@
 
 <!--Describe your changes here-->
 
-[ ] By checking this box you agree to the following statement.
+- [ ] By checking this box you agree to the following statement.
 
 I dedicate any and all copyright interest in this software to the
 public domain. I make this dedication for the benefit of the public at
