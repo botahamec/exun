@@ -12,7 +12,7 @@ pub use Exun::{Expected, Unexpected};
 /// `Expect` is a type that represents either the expected error type
 /// ([`Expected`]) or an unexpected type ([`Unexpected`]).
 ///
-/// See the [crate documentation](self) for details.
+/// See the [crate documentation](crate) for details.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Exun<E, U> {
 	/// Contains the expected type
@@ -82,10 +82,10 @@ impl<E, U> Exun<E, U> {
 	/// ```
 	/// use exun::*;
 	///
-	/// let x: Expect<i32, &str> = Expected(2);
+	/// let x: Exun<i32, &str> = Expected(2);
 	/// assert_eq!(x.expected(), Some(2));
 	///
-	/// let x: Expect<i32, &str> = Unexpected("Nothing here");
+	/// let x: Exun<i32, &str> = Unexpected("Nothing here");
 	/// assert_eq!(x.expected(), None);
 	/// ```
 	#[allow(clippy::missing_const_for_fn)]
@@ -108,10 +108,10 @@ impl<E, U> Exun<E, U> {
 	/// ```
 	/// use exun::*;
 	///
-	/// let x: Expect<i32, &str> = Expected(2);
+	/// let x: Exun<i32, &str> = Expected(2);
 	/// assert_eq!(x.unexpected(), None);
 	///
-	/// let x: Expect<i32, &str> = Unexpected("Nothing here");
+	/// let x: Exun<i32, &str> = Unexpected("Nothing here");
 	/// assert_eq!(x.unexpected(), Some("Nothing here"));
 	/// ```
 	#[allow(clippy::missing_const_for_fn)]
@@ -131,7 +131,7 @@ impl<E, U> Exun<E, U> {
 	/// ```
 	/// use exun::*;
 	///
-	/// fn mutate(r: &mut Expect<i32, i32>) {
+	/// fn mutate(r: &mut Exun<i32, i32>) {
 	///     match r.as_mut() {
 	///         Expected(e) => *e = 42,
 	///         Unexpected(u) => *u = 0,
@@ -166,10 +166,10 @@ impl<E, U> Exun<E, U> {
 	/// ```
 	/// use exun::*;
 	///
-	/// let x: Expect<i32, &str> = Expected(2);
+	/// let x: Exun<i32, &str> = Expected(2);
 	/// assert_eq!(x.map(|i| i * 10), Expected(20));
 	///
-	/// let x: Expect<i32, &str> = Unexpected("unexpected");
+	/// let x: Exun<i32, &str> = Unexpected("unexpected");
 	/// assert_eq!(x.map(|i| i * 10), Unexpected("unexpected"));
 	/// ```
 	pub fn map<T, F: FnOnce(E) -> T>(self, op: F) -> Exun<T, U> {
@@ -195,10 +195,10 @@ impl<E, U> Exun<E, U> {
 	///
 	/// fn stringify(x: u32) -> String { format!("error code: {x}") }
 	///
-	/// let x: Expect<u32, u32> = Expected(2);
+	/// let x: Exun<u32, u32> = Expected(2);
 	/// assert_eq!(x.map_unexpected(stringify), Expected(2));
 	///
-	/// let x: Expect<u32, u32> = Unexpected(13);
+	/// let x: Exun<u32, u32> = Unexpected(13);
 	/// assert_eq!(x.map_unexpected(stringify), Unexpected("error code: 13".to_string()));
 	/// ```
 	pub fn map_unexpected<T, F: FnOnce(U) -> T>(self, op: F) -> Exun<E, T> {
@@ -226,14 +226,14 @@ impl<E, U> Exun<E, U> {
 	/// ```
 	/// use exun::*;
 	///
-	/// let x: Expect<u32, &str> = Expected(2);
+	/// let x: Exun<u32, &str> = Expected(2);
 	/// assert_eq!(x.unwrap(), 2);
 	/// ```
 	///
 	/// ```should_panic
 	/// use exun::*;
 	///
-	/// let x: Expect<u32, &str> = Unexpected("emergency failure");
+	/// let x: Exun<u32, &str> = Unexpected("emergency failure");
 	/// x.unwrap(); // panics with `emergency failure`
 	/// ```
 	pub fn unwrap(self) -> E
@@ -260,14 +260,14 @@ impl<E, U> Exun<E, U> {
 	/// ```should_panic
 	/// use exun::*;
 	///
-	/// let x: Expect<u32, &str> = Expected(2);
+	/// let x: Exun<u32, &str> = Expected(2);
 	/// x.unwrap_unexpected(); // panics wirh `2`
 	/// ```
 	///
 	/// ```
 	/// use exun::*;
 	///
-	/// let x: Expect<u32, &str> = Unexpected("emergency failure");
+	/// let x: Exun<u32, &str> = Unexpected("emergency failure");
 	/// assert_eq!(x.unwrap_unexpected(), "emergency failure");
 	/// ```
 	pub fn unwrap_unexpected(self) -> U

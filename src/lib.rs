@@ -12,7 +12,7 @@ mod result;
 #[cfg(feature = "alloc")]
 mod unexpected;
 
-pub use exun::{Expected, Exun, Unexpected};
+pub use crate::exun::{Expected, Exun, Unexpected};
 #[cfg(feature = "std")]
 pub use result::ResultErrorExt;
 #[cfg(feature = "alloc")]

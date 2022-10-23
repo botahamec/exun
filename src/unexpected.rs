@@ -78,7 +78,7 @@ impl RawUnexpected {
 	/// ```
 	/// use exun::*;
 	///
-	/// let x = UnexpectedError::msg("failed");
+	/// let x = RawUnexpected::msg("failed");
 	/// ```
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(e: E) -> Self {
 		Self {
@@ -99,10 +99,10 @@ impl RawUnexpected {
 	/// use exun::*;
 	///
 	/// let x = RawUnexpected::new(core::fmt::Error);
-	/// assert!(err.source().is_some());
+	/// assert!(x.source().is_some());
 	///
 	/// let x = RawUnexpected::msg("failed");
-	/// assert!(err.source().is_none());
+	/// assert!(x.source().is_none());
 	/// ```
 	#[must_use]
 	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
