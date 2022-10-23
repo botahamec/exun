@@ -57,7 +57,7 @@ impl RawUnexpected {
 	/// ```
 	/// use exun::*;
 	///
-	/// let err = RawUnexpected::new(core::fmt::Error);
+	/// let x = RawUnexpected::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
 	pub fn new<E: Error + Send + Sync + 'static>(e: E) -> Self {
@@ -78,11 +78,38 @@ impl RawUnexpected {
 	/// ```
 	/// use exun::*;
 	///
-	/// let err = UnexpectedError::msg("failed");
+	/// let x = UnexpectedError::msg("failed");
 	/// ```
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(e: E) -> Self {
 		Self {
 			internal: ErrorTy::Message(Box::new(e)),
+		}
+	}
+
+	/// Get the original error.
+	///
+	/// This will return `None` if `self` was created using
+	/// [`RawUnexpected::msg`].
+	///
+	/// # Examples
+	///
+	/// Basic usage:
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let x = RawUnexpected::new(core::fmt::Error);
+	/// assert!(err.source().is_some());
+	///
+	/// let x = RawUnexpected::msg("failed");
+	/// assert!(err.source().is_none());
+	/// ```
+	#[must_use]
+	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
+		match &self.internal {
+			ErrorTy::Message(m) => None,
+			#[cfg(feature = "std")]
+			ErrorTy::Error(e) => Some(&**e),
 		}
 	}
 }
@@ -109,10 +136,6 @@ impl Display for UnexpectedError {
 #[cfg(feature = "std")]
 impl Error for UnexpectedError {
 	fn source(&self) -> Option<&(dyn Error + 'static)> {
-		match &self.0.internal {
-			ErrorTy::Message(_) => None,
-			#[cfg(feature = "std")]
-			ErrorTy::Error(e) => Some(&**e),
-		}
+		self.0.source()
 	}
 }
