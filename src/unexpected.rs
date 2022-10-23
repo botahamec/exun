@@ -16,6 +16,12 @@ enum ErrorTy {
 	Error(Box<dyn Error + Send + Sync + 'static>),
 }
 
+/// A wrapper for an error that isn't expected to occur.
+///
+/// This implements [`From<T>`] where `T` implements [`Error`], [`Send`],
+/// [`Sync`] and `'static` for easy conversion. Because of this, it cannot
+/// itself implement [`Error`]. If you need a type that implements [`Error`]
+/// but doesn't implement `From<Error>`, use [`UnexpectedError`].
 #[derive(Debug)]
 pub struct RawUnexpected {
 	internal: ErrorTy,
@@ -77,6 +83,36 @@ impl RawUnexpected {
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(e: E) -> Self {
 		Self {
 			internal: ErrorTy::Message(Box::new(e)),
+		}
+	}
+}
+
+/// An error that isn't expected to occur.
+///
+/// This implements [`Error`]. Because of this, it cannot implement
+/// `From<Error>`. If that's something you need, try [`RawUnexpected`].
+#[derive(Debug)]
+pub struct UnexpectedError(RawUnexpected);
+
+impl From<RawUnexpected> for UnexpectedError {
+	fn from(ru: RawUnexpected) -> Self {
+		Self(ru)
+	}
+}
+
+impl Display for UnexpectedError {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		Display::fmt(&self.0, f)
+	}
+}
+
+#[cfg(feature = "std")]
+impl Error for UnexpectedError {
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		match &self.0.internal {
+			ErrorTy::Message(_) => None,
+			#[cfg(feature = "std")]
+			ErrorTy::Error(e) => Some(&**e),
 		}
 	}
 }
