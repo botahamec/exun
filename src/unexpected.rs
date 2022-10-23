@@ -139,3 +139,9 @@ impl Error for UnexpectedError {
 		self.0.source()
 	}
 }
+
+impl AsRef<RawUnexpected> for UnexpectedError {
+	fn as_ref(&self) -> &RawUnexpected {
+		&self.0
+	}
+}
