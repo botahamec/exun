@@ -107,7 +107,7 @@ impl RawUnexpected {
 	#[must_use]
 	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match &self.internal {
-			ErrorTy::Message(m) => None,
+			ErrorTy::Message(_) => None,
 			#[cfg(feature = "std")]
 			ErrorTy::Error(e) => Some(&**e),
 		}
