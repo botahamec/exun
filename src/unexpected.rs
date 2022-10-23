@@ -32,25 +32,9 @@ impl Display for UnexpectedError {
 }
 
 #[cfg(feature = "std")]
-impl Error for UnexpectedError {
-	fn source(&self) -> Option<&(dyn Error + 'static)> {
-		match &self.internal {
-			ErrorTy::Message(_) => None,
-			#[cfg(feature = "std")]
-			ErrorTy::Error(e) => Some(&**e),
-		}
-	}
-}
-
-impl From<&str> for UnexpectedError {
-	fn from(s: &str) -> Self {
-		String::from(s).into()
-	}
-}
-
-impl From<String> for UnexpectedError {
-	fn from(s: String) -> Self {
-		Self::msg(s)
+impl<T: Error + Send + Sync + 'static> From<T> for UnexpectedError {
+	fn from(e: T) -> Self {
+		Self::new(e)
 	}
 }
 
