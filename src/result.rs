@@ -15,7 +15,7 @@ use sealed::Sealed;
 /// [`Result::unexpect`]: `ResultErrorExt::unexpect`
 #[cfg(feature = "std")]
 pub trait ResultErrorExt<T>: Sealed {
-	/// Converts `Result<T, E>` to `Result<T, RawUnexpected>`.
+	/// Converts [`Result<T, E>`] to [`Result<T, RawUnexpected>`].
 	///
 	/// # Examples
 	///
@@ -69,7 +69,7 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 ///
 /// [`Result::unexpect_msg`]: `ResultMsgExt::unexpect_msg`
 pub trait ResultMsgExt<T>: Sealed {
-	/// Converts `Result<T, E>` to `Result<T, RawUnExpected>`.
+	/// Converts [`Result<T, E>`] to [`Result<T, RawUnexpected>`].
 	///
 	/// This is provided for compatibility with `no_std`. If your type
 	/// implements [`Error`], then you should prefer that instead.

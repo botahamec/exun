@@ -71,7 +71,7 @@ impl<E> From<RawUnexpected> for Exun<E, UnexpectedError> {
 }
 
 impl<E, U> Exun<E, U> {
-	/// Converts from `Expect<E, U>` to [`Option<E>`].
+	/// Converts from `Exun<E, U>` to [`Option<E>`].
 	///
 	/// Converts `self` into an [`Option<E>`], consuming `self`, and discarding
 	/// the unexpected value, if any.
@@ -95,7 +95,7 @@ impl<E, U> Exun<E, U> {
 		}
 	}
 
-	/// Converts from `Expect<E, U>` to [`Option<U>`].
+	/// Converts from `Exun<E, U>` to [`Option<U>`].
 	///
 	/// Converts `self` into an [`Option<U>`], consuming `self`, and discarding
 	/// the expected value, if any.
@@ -121,7 +121,7 @@ impl<E, U> Exun<E, U> {
 		}
 	}
 
-	/// Converts from `&mut Expect<E, U>` to `Expect<&mut E, &mut U>`.
+	/// Converts from `&mut Exun<E, U>` to `Exun<&mut E, &mut U>`.
 	///
 	/// # Examples
 	///
@@ -152,7 +152,7 @@ impl<E, U> Exun<E, U> {
 		}
 	}
 
-	/// Maps a `Expect<E, U>` to `Expect<T, U>` by applying a function to a
+	/// Maps a `Exun<E, U>` to `Exun<T, U>` by applying a function to a
 	/// contained [`Expected`] value, leaving an [`Unexpected`] value
 	/// untouched.
 	///
@@ -178,7 +178,7 @@ impl<E, U> Exun<E, U> {
 		}
 	}
 
-	/// Maps a `Expect<E, U>` to `Expect<E, T>` by applying a function to a
+	/// Maps a `Exun<E, U>` to `Exun<E, T>` by applying a function to a
 	/// contained [`Unexpected`] value, leaving an [`Expected`] value
 	/// untouched.
 	///

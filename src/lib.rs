@@ -155,5 +155,6 @@ pub use result::ResultMsgExt;
 pub use unexpected::{RawUnexpected, UnexpectedError};
 pub use Exun::{Expected, Unexpected};
 
+/// A type alias for [`Exun<E, RawUnexpected`]
 #[cfg(feature = "alloc")]
 pub type Expect<E> = Exun<E, RawUnexpected>;
