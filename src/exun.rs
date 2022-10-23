@@ -3,6 +3,9 @@ use core::fmt::{self, Debug, Display};
 #[cfg(feature = "std")]
 use std::error::Error;
 
+#[cfg(feature = "alloc")]
+use crate::UnexpectedError;
+
 pub use Exun::{Expected, Unexpected};
 
 /// `Expect` is a type that represents either the expected error type
@@ -36,9 +39,17 @@ impl<E: Error + 'static, U: Error + 'static> Error for Exun<E, U> {
 	}
 }
 
-impl<E, U> From<E> for Exun<E, U> {
+#[cfg(feature = "std")]
+impl<E: Error, U> From<E> for Exun<E, U> {
 	fn from(e: E) -> Self {
 		Expected(e)
+	}
+}
+
+#[cfg(feature = "alloc")]
+impl<E> From<UnexpectedError> for Exun<E, UnexpectedError> {
+	fn from(ue: UnexpectedError) -> Self {
+		Unexpected(ue)
 	}
 }
 
