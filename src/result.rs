@@ -65,6 +65,12 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 	}
 }
 
+impl<T> ResultErrorExt<T> for Result<T, RawUnexpected> {
+	fn unexpect(self) -> Self {
+		self
+	}
+}
+
 /// Provides [`Result::unexpect_msg`]
 ///
 /// [`Result::unexpect_msg`]: `ResultMsgExt::unexpect_msg`
