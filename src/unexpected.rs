@@ -11,6 +11,7 @@ impl<T: Display + Debug + Send + Sync + ?Sized> Errorable for T {}
 
 #[derive(Debug)]
 enum ErrorTy {
+	None,
 	Message(Box<dyn Errorable + 'static>),
 	#[cfg(feature = "std")]
 	Error(Box<dyn Error + Send + Sync + 'static>),
@@ -30,6 +31,7 @@ pub struct RawUnexpected {
 impl Display for RawUnexpected {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match &self.internal {
+			ErrorTy::None => Display::fmt("Called `unexpect` on a `None` value", f),
 			ErrorTy::Message(m) => Display::fmt(&m, f),
 			#[cfg(feature = "std")]
 			ErrorTy::Error(e) => Display::fmt(&e, f),
@@ -60,6 +62,7 @@ impl RawUnexpected {
 	/// let x = RawUnexpected::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
+	#[must_use]
 	pub fn new<E: Error + Send + Sync + 'static>(error: E) -> Self {
 		Self {
 			internal: ErrorTy::Error(Box::new(error)),
@@ -80,9 +83,31 @@ impl RawUnexpected {
 	///
 	/// let x = RawUnexpected::msg("failed");
 	/// ```
+	#[must_use]
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
 		Self {
 			internal: ErrorTy::Message(Box::new(error)),
+		}
+	}
+
+	/// Create a new `RawUnexpected` that is simply empty.
+	///
+	/// This is used for converting an [`Option<T>`] to a
+	/// [`Result<T, RawUnexpected`].
+	///
+	/// # Examples
+	///
+	/// Basic usage:
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let x = RawUnexpected::none();
+	/// ```
+	#[must_use]
+	pub fn none() -> Self {
+		Self {
+			internal: ErrorTy::None,
 		}
 	}
 
@@ -108,6 +133,7 @@ impl RawUnexpected {
 	#[cfg(feature = "std")]
 	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match &self.internal {
+			ErrorTy::None => None,
 			ErrorTy::Message(_) => None,
 			#[cfg(feature = "std")]
 			ErrorTy::Error(e) => Some(&**e),
@@ -138,6 +164,7 @@ impl UnexpectedError {
 	/// let x = UnexpectedError::new(core::fmt::Error);
 	/// ```
 	#[cfg(feature = "std")]
+	#[must_use]
 	pub fn new<E: Error + Send + Sync + 'static>(error: E) -> Self {
 		Self(RawUnexpected::new(error))
 	}
@@ -156,8 +183,28 @@ impl UnexpectedError {
 	///
 	/// let x = UnexpectedError::msg("failed");
 	/// ```
+	#[must_use]
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
 		Self(RawUnexpected::msg(error))
+	}
+
+	/// Create a new `RawUnexpected` that is simply empty.
+	///
+	/// This is used for converting an [`Option<T>`] to a
+	/// [`Result<T, RawUnexpected`].
+	///
+	/// # Examples
+	///
+	/// Basic usage:
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let x = UnexpectedError::none();
+	/// ```
+	#[must_use]
+	pub fn none() -> Self {
+		Self(RawUnexpected::none())
 	}
 }
 

@@ -6,6 +6,7 @@ use crate::{unexpected::Errorable, RawUnexpected};
 mod sealed {
 	pub trait Sealed {}
 	impl<T, E> Sealed for Result<T, E> {}
+	impl<T> Sealed for Option<T> {}
 }
 
 use sealed::Sealed;
@@ -68,6 +69,12 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 impl<T> ResultErrorExt<T> for Result<T, RawUnexpected> {
 	fn unexpect(self) -> Self {
 		self
+	}
+}
+
+impl<T> ResultErrorExt<T> for Option<T> {
+	fn unexpect(self) -> Result<T, RawUnexpected> {
+		self.ok_or_else(RawUnexpected::none)
 	}
 }
 
