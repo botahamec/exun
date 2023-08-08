@@ -158,3 +158,9 @@ pub use Exun::{Expected, Unexpected};
 /// A type alias for [`Exun<E, RawUnexpected>`]
 #[cfg(feature = "alloc")]
 pub type Expect<E> = Exun<E, RawUnexpected>;
+
+/// A type alias for [`Result<T, RawUnexpected>`]
+///
+/// [`Result<T, RawUnexpected>`]: std::result::Result
+#[cfg(feature = "alloc")]
+pub type Result<T> = core::result::Result<T, RawUnexpected>;
