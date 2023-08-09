@@ -93,7 +93,7 @@ impl RawUnexpected {
 	/// Create a new `RawUnexpected` that is simply empty.
 	///
 	/// This is used for converting an [`Option<T>`] to a
-	/// [`Result<T, RawUnexpected`].
+	/// [`Result<T, RawUnexpected>`].
 	///
 	/// # Examples
 	///
@@ -113,7 +113,7 @@ impl RawUnexpected {
 
 	/// Get the original error.
 	///
-	/// This will return `None` if `self` was created using
+	/// This will return [`None`] if `self` was created using
 	/// [`RawUnexpected::msg`].
 	///
 	/// # Examples
