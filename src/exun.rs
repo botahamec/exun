@@ -251,7 +251,7 @@ impl<E, U> Exun<E, U> {
 	///
 	/// Because this function may panic, its use is generally discouraged.
 	/// Instead, prefer to use pattern matching and handle the [`Unexpected`]
-	/// case explicitly.
+	/// case explicitly, or call [`unwrap_or`] or [`unwrap_or_else`].
 	///
 	/// # Panics
 	///
@@ -273,6 +273,9 @@ impl<E, U> Exun<E, U> {
 	/// let x: Exun<u32, &str> = Unexpected("emergency failure");
 	/// x.unwrap(); // panics with `emergency failure`
 	/// ```
+	///
+	/// [`unwrap_or`]: Self::unwrap_or
+	/// [`unwrap_or_else`]: Self::unwrap_or_else
 	pub fn unwrap(self) -> E
 	where
 		U: Debug,
@@ -315,6 +318,52 @@ impl<E, U> Exun<E, U> {
 				e
 			),
 			Unexpected(u) => u,
+		}
+	}
+
+	/// Returns the contained [`Expected`] value or a provided default.
+	///
+	/// Arguments passed to `unwrap_or` are eagerly evaluated; if you are
+	/// passing the result of a function call, it is recommended to use
+	/// [`unwrap_or_else`], which is lazily evaluated.
+	///
+	/// # Examples
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// let default = 2;
+	/// let x: Exun<u32, &str> = Expected(9);
+	/// assert_eq!(x.unwrap_or(default), 9);
+	///
+	/// let x: Exun<u32, &str> = Unexpected("error");
+	/// assert_eq!(x.unwrap_or(default), default);
+	/// ```
+	///
+	/// [`unwrap_or_else`]: Self::unwrap_or_else
+	pub fn unwrap_or(self, default: E) -> E {
+		match self {
+			Expected(e) => e,
+			Unexpected(_) => default,
+		}
+	}
+
+	/// Returns the [`Expected`] value or returns it from a closure.
+	///
+	/// # Examples
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// fn count(x: &str) -> usize { x.len() }
+	///
+	/// assert_eq!(Expected(2).unwrap_or_else(count), 2);
+	/// assert_eq!(Unexpected("foo").unwrap_or_else(count), 3);
+	/// ```
+	pub fn unwrap_or_else(self, op: impl FnOnce(U) -> E) -> E {
+		match self {
+			Expected(e) => e,
+			Unexpected(u) => op(u),
 		}
 	}
 }
