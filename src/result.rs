@@ -22,8 +22,6 @@ pub trait ResultErrorExt<T>: Sealed {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	/// use core::fmt::Error;
@@ -90,8 +88,6 @@ pub trait ResultMsgExt<T>: Sealed {
 	/// implements [`Error`], then you should prefer that instead.
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```
 	/// use exun::*;

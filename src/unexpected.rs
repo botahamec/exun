@@ -54,8 +54,6 @@ impl RawUnexpected {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -76,8 +74,6 @@ impl RawUnexpected {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -97,8 +93,6 @@ impl RawUnexpected {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -117,8 +111,6 @@ impl RawUnexpected {
 	/// [`RawUnexpected::msg`].
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```
 	/// use exun::*;
@@ -156,8 +148,6 @@ impl UnexpectedError {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -176,8 +166,6 @@ impl UnexpectedError {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -194,8 +182,6 @@ impl UnexpectedError {
 	/// [`Result<T, RawUnexpected>`].
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```
 	/// use exun::*;

@@ -77,7 +77,7 @@ impl<E, U> Exun<E, U> {
 	/// the unexpected value, if any.
 	///
 	/// # Examples
-	/// Basic usage:
+	///
 	/// ```
 	/// use exun::*;
 	///
@@ -102,8 +102,6 @@ impl<E, U> Exun<E, U> {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -124,8 +122,6 @@ impl<E, U> Exun<E, U> {
 	/// Converts from `&mut Exun<E, U>` to `Exun<&mut E, &mut U>`.
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```
 	/// use exun::*;
@@ -160,8 +156,6 @@ impl<E, U> Exun<E, U> {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -186,8 +180,6 @@ impl<E, U> Exun<E, U> {
 	/// handling an error.
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```
 	/// use exun::*;
@@ -271,8 +263,6 @@ impl<E, U> Exun<E, U> {
 	///
 	/// # Examples
 	///
-	/// Basic usage:
-	///
 	/// ```
 	/// use exun::*;
 	///
@@ -304,8 +294,6 @@ impl<E, U> Exun<E, U> {
 	/// the [`Expected`]'s value.
 	///
 	/// # Examples
-	///
-	/// Basic usage:
 	///
 	/// ```should_panic
 	/// use exun::*;
