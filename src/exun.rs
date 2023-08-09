@@ -207,6 +207,57 @@ impl<E, U> Exun<E, U> {
 		}
 	}
 
+	/// Returns the [`Expected`] value, consuming the `self` value.
+	///
+	/// Because this function may panic, its use is generally discouraged.
+	/// Instead, prefer to use pattern matching and handle the [`Unexpected`]
+	/// case explicitly.
+	///
+	/// # Panics
+	///
+	/// Panics if the value is an [`Unexpected`] value, with a panic message
+	/// including the passed message, and the content of the [`Unexpected`]
+	/// value.
+	///
+	/// # Examples
+	///
+	/// ```should_panic
+	/// use exun::*;
+	///
+	/// let x: Exun<u32, &str> = Exun::Unexpected("error");
+	/// x.expect("Testing expect"); // panics with "testing expect: error"
+	/// ```
+	///
+	/// # Recommended Message Style
+	///
+	/// We recommend that `expect` messages are used to describe the reason you
+	/// *expect* the `Exun` should be `Expected`.
+	///
+	/// ```should_panic
+	/// let path = std::env::var("IMPORTANT_PATH")
+	///     .expect("env variable `IMPORTANT_PATH` should be set by script.sh")
+	/// ```
+	///
+	/// **Hint:** If you're having trouble remembering how to phrase expect
+	/// error messages, remember to focus on the word "should" as in "env
+	/// variable set by blah" or "the given binary should be available and
+	/// executable by the current user".
+	///
+	/// For more detail on expect message styles and the reasoning behind the
+	/// recommendation please refer to the section on
+	/// ["Common Message Styles"](https://doc.rust-lang.org/stable/std/error/index.html#common-message-styles)
+	/// in the [`std::error`](https://doc.rust-lang.org/stable/std/error/index.html)
+	/// module docs.
+	pub fn expect(self, msg: &str) -> E
+	where
+		U: Debug,
+	{
+		match self {
+			Self::Expected(e) => e,
+			Self::Unexpected(e) => panic!("{}: {:?}", msg, e),
+		}
+	}
+
 	/// Returns the contained [`Expected`] value, consuming the `self` value.
 	///
 	/// Because this function may panic, its use is generally discouraged.
