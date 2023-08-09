@@ -3,6 +3,7 @@
 #![warn(clippy::pedantic)]
 #![warn(clippy::cargo)]
 #![allow(clippy::module_name_repetitions)]
+#![allow(clippy::missing_errors_doc)]
 //! There are many errors we don't expect to occur. But what if we're wrong? We
 //! don't want our programs to panic because of that. We also don't want to spend
 //! so much time handling unexpected errors. That's what this crate is for. You
@@ -150,7 +151,7 @@ pub use crate::exun::Exun;
 #[cfg(feature = "std")]
 pub use result::ResultErrorExt;
 #[cfg(feature = "alloc")]
-pub use result::ResultMsgExt;
+pub use result::{ResultExunExt, ResultMsgExt};
 #[cfg(feature = "alloc")]
 pub use unexpected::{RawUnexpected, UnexpectedError};
 pub use Exun::{Expected, Unexpected};

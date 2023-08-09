@@ -235,7 +235,7 @@ impl<E, U> Exun<E, U> {
 	///
 	/// ```should_panic
 	/// let path = std::env::var("IMPORTANT_PATH")
-	///     .expect("env variable `IMPORTANT_PATH` should be set by script.sh")
+	///     .expect("env variable `IMPORTANT_PATH` should be set by test.sh");
 	/// ```
 	///
 	/// **Hint:** If you're having trouble remembering how to phrase expect
@@ -311,7 +311,7 @@ impl<E, U> Exun<E, U> {
 	/// use exun::*;
 	///
 	/// let x: Exun<u32, &str> = Expected(2);
-	/// x.unwrap_unexpected(); // panics wirh `2`
+	/// x.unwrap_unexpected(); // panics with `2`
 	/// ```
 	///
 	/// ```
