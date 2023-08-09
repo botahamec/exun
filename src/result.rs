@@ -1,7 +1,9 @@
+use core::fmt::Debug;
+
 #[cfg(feature = "std")]
 use std::error::Error;
 
-use crate::{unexpected::Errorable, RawUnexpected};
+use crate::{unexpected::Errorable, Exun, RawUnexpected};
 
 mod sealed {
 	pub trait Sealed {}
@@ -128,5 +130,73 @@ pub trait ResultMsgExt<T>: Sealed {
 impl<T, E: Errorable + 'static> ResultMsgExt<T> for Result<T, E> {
 	fn unexpect_msg(self) -> Result<T, RawUnexpected> {
 		self.map_err(RawUnexpected::msg)
+	}
+}
+
+trait ResultExunExt<T, E, U>: Sealed {
+	fn expected_err(self) -> Option<E>;
+
+	fn unexpected_err(self) -> Option<U>;
+
+	fn map_expected_err<F>(self, op: impl FnOnce(E) -> F) -> Result<T, Exun<F, U>>;
+
+	fn map_unexpected_err<F>(self, op: impl FnOnce(U) -> F) -> Result<T, Exun<E, F>>;
+
+	fn unwrap_result(self) -> Result<T, E>
+	where
+		U: Debug;
+
+	fn unwrap_expected_err(self) -> E
+	where
+		T: Debug,
+		U: Debug;
+
+	fn unwrap_unexpected_err(self) -> U
+	where
+		T: Debug,
+		E: Debug;
+}
+
+impl<T, E, U> ResultExunExt<T, E, U> for Result<T, Exun<E, U>> {
+	fn expected_err(self) -> Option<E> {
+		self.err()?.expected()
+	}
+
+	fn unexpected_err(self) -> Option<U> {
+		self.err()?.unexpected()
+	}
+
+	fn map_expected_err<F>(self, op: impl FnOnce(E) -> F) -> Result<T, Exun<F, U>> {
+		self.map_err(|e| e.map(op))
+	}
+
+	fn map_unexpected_err<F>(self, op: impl FnOnce(U) -> F) -> Result<T, Exun<E, F>> {
+		self.map_err(|e| e.map_unexpected(op))
+	}
+
+	fn unwrap_result(self) -> Result<T, E>
+	where
+		U: Debug,
+	{
+		match self {
+			Ok(value) => Ok(value),
+			Err(error) => Err(error.unwrap()),
+		}
+	}
+
+	fn unwrap_expected_err(self) -> E
+	where
+		T: Debug,
+		U: Debug,
+	{
+		self.unwrap_err().unwrap()
+	}
+
+	fn unwrap_unexpected_err(self) -> U
+	where
+		T: Debug,
+		E: Debug,
+	{
+		self.unwrap_err().unwrap_unexpected()
 	}
 }

@@ -214,6 +214,18 @@ impl From<RawUnexpected> for UnexpectedError {
 	}
 }
 
+impl From<&'static str> for UnexpectedError {
+	fn from(value: &'static str) -> Self {
+		Self(RawUnexpected::msg(value))
+	}
+}
+
+impl From<String> for UnexpectedError {
+	fn from(value: String) -> Self {
+		Self(RawUnexpected::msg(value))
+	}
+}
+
 impl Display for UnexpectedError {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		Display::fmt(&self.0, f)
