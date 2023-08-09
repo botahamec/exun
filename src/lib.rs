@@ -156,7 +156,7 @@ pub use result::ResultErrorExt;
 pub use result::ResultMsgExt;
 
 pub use crate::exun::Exun;
-pub use result::ResultExunExt;
+pub use result::{ResultExunExt, ResultNoneExt};
 pub use unexpected::{RawUnexpected, UnexpectedError};
 pub use Exun::{Expected, Unexpected};
 

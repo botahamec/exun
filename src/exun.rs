@@ -3,7 +3,6 @@ use core::fmt::{self, Debug, Display};
 #[cfg(feature = "std")]
 use std::error::Error;
 
-#[cfg(feature = "alloc")]
 use crate::{RawUnexpected, UnexpectedError};
 
 pub use Exun::{Expected, Unexpected};
@@ -56,14 +55,12 @@ impl<E: Error, U> From<E> for Exun<E, U> {
 	}
 }
 
-#[cfg(feature = "alloc")]
 impl<E> From<RawUnexpected> for Exun<E, RawUnexpected> {
 	fn from(ue: RawUnexpected) -> Self {
 		Unexpected(ue)
 	}
 }
 
-#[cfg(feature = "alloc")]
 impl<E> From<RawUnexpected> for Exun<E, UnexpectedError> {
 	fn from(ue: RawUnexpected) -> Self {
 		Unexpected(ue.into())

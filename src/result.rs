@@ -133,6 +133,76 @@ impl<T, E: Errorable + 'static> ResultMsgExt<T> for Result<T, E> {
 	}
 }
 
+/// Provides [`Result::unexpect_none`] and [`Option::unexpect_none`]
+///
+/// [`Result::unexpect_none`]: `ResultNoneExt::unexpect_none`
+/// [`Option::unexpect_none`]: `ResultNoneExt::unexpect_none`
+pub trait ResultNoneExt<T>: Sealed {
+	/// Converts [`Result<T, E>`] or [`Option<T>`] to
+	/// [`Result<T, RawUnexpected>`].
+	///
+	/// # Examples
+	///
+	/// ```
+	/// use exun::*;
+	/// use core::fmt::Error;
+	///
+	/// let res: Result<i32, Error> = Err(Error);
+	/// let res: Result<i32, RawUnexpected> = res.unexpect_none();
+	/// ```
+	///
+	/// Use with the try operator
+	///
+	/// ```
+	/// use exun::*;
+	/// use core::fmt::Error;
+	///
+	/// fn foo() -> Result<i32, UnexpectedError> {
+	///     let res: Result<i32, Error> = Err(Error);
+	///     Ok(res.unexpect_none()?)
+	/// }
+	/// ```
+	///
+	/// Use with the try operator and [`Exun`]
+	///
+	/// ```
+	/// use exun::*;
+	/// use core::fmt::Error;
+	///
+	/// fn foo() -> Result<i32, Exun<(), UnexpectedError>> {
+	///     let res: Result<i32, Error> = Err(Error);
+	///     Ok(res.unexpect_none()?)
+	/// }
+	/// ```
+	///
+	/// Use with [`Option`]
+	///
+	/// ```
+	/// use exun::*;
+	///
+	/// fn foo() -> Result<i32, UnexpectedError> {
+	///     let option: Option<i32> = None;
+	///     Ok(option.unexpect_none()?)
+	/// }
+	/// ```
+	///
+	/// [`Exun`]: `crate::Exun`
+	#[allow(clippy::missing_errors_doc)]
+	fn unexpect_none(self) -> Result<T, RawUnexpected>;
+}
+
+impl<T, E> ResultNoneExt<T> for Result<T, E> {
+	fn unexpect_none(self) -> Result<T, RawUnexpected> {
+		self.map_or_else(|_| Err(RawUnexpected::none()), |val| Ok(val))
+	}
+}
+
+impl<T> ResultNoneExt<T> for Option<T> {
+	fn unexpect_none(self) -> Result<T, RawUnexpected> {
+		self.ok_or_else(RawUnexpected::none)
+	}
+}
+
 pub trait ResultExunExt<T, E, U>: Sealed {
 	/// Converts [`Result<T, Exun<E, U>>`] to [`Option<E>`].
 	///
