@@ -191,7 +191,7 @@ impl UnexpectedError {
 	/// Create a new `RawUnexpected` that is simply empty.
 	///
 	/// This is used for converting an [`Option<T>`] to a
-	/// [`Result<T, RawUnexpected`].
+	/// [`Result<T, RawUnexpected>`].
 	///
 	/// # Examples
 	///
