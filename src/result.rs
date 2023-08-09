@@ -66,12 +66,14 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 	}
 }
 
+#[cfg(feature = "alloc")]
 impl<T> ResultErrorExt<T> for Result<T, RawUnexpected> {
 	fn unexpect(self) -> Self {
 		self
 	}
 }
 
+#[cfg(feature = "alloc")]
 impl<T> ResultErrorExt<T> for Option<T> {
 	fn unexpect(self) -> Result<T, RawUnexpected> {
 		self.ok_or_else(RawUnexpected::none)
@@ -81,6 +83,7 @@ impl<T> ResultErrorExt<T> for Option<T> {
 /// Provides [`Result::unexpect_msg`]
 ///
 /// [`Result::unexpect_msg`]: `ResultMsgExt::unexpect_msg`
+#[cfg(feature = "alloc")]
 pub trait ResultMsgExt<T>: Sealed {
 	/// Converts [`Result<T, E>`] to [`Result<T, RawUnexpected>`].
 	///
@@ -123,6 +126,7 @@ pub trait ResultMsgExt<T>: Sealed {
 	fn unexpect_msg(self) -> Result<T, RawUnexpected>;
 }
 
+#[cfg(feature = "alloc")]
 impl<T, E: Errorable + 'static> ResultMsgExt<T> for Result<T, E> {
 	fn unexpect_msg(self) -> Result<T, RawUnexpected> {
 		self.map_err(RawUnexpected::msg)

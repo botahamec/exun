@@ -142,18 +142,19 @@
 extern crate alloc;
 
 mod exun;
-#[cfg(feature = "alloc")]
 mod result;
-#[cfg(feature = "alloc")]
 mod unexpected;
 
-pub use crate::exun::Exun;
 #[cfg(feature = "std")]
 pub use result::ResultErrorExt;
+
 #[cfg(feature = "alloc")]
-pub use result::{ResultExunExt, ResultMsgExt};
+pub use result::ResultMsgExt;
 #[cfg(feature = "alloc")]
 pub use unexpected::{RawUnexpected, UnexpectedError};
+
+pub use crate::exun::Exun;
+pub use result::ResultExunExt;
 pub use Exun::{Expected, Unexpected};
 
 /// A type alias for [`Exun<E, RawUnexpected>`]
