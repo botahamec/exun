@@ -4,6 +4,7 @@
 #![warn(clippy::cargo)]
 #![allow(clippy::module_name_repetitions)]
 #![allow(clippy::missing_errors_doc)]
+
 //! There are many errors we don't expect to occur. But what if we're wrong? We
 //! don't want our programs to panic because of that. We also don't want to spend
 //! so much time handling unexpected errors. That's what this crate is for. You
@@ -69,6 +70,7 @@
 //! ```
 //! use exun::*;
 //!
+//! # #[cfg(feature = "std")]
 //! fn foo(num: &str) -> Result<i32, RawUnexpected> {
 //!     // we use `unexpect` to indicate that we don't expect this error to occur
 //!     let num = num.parse::<i32>().unexpect()?;
@@ -93,6 +95,7 @@
 //!
 //! impl Error for NoNumberError {}
 //!
+//! # #[cfg(feature = "std")]
 //! fn foo(num: Option<&str>) -> Result<i32, Expect<NoNumberError>> {
 //!     let num = num.ok_or(NoNumberError)?; // we expect that this may return an error
 //!     let num = num.parse::<i32>().unexpect()?; // but we think the number is otherwise parsable
@@ -118,6 +121,7 @@
 //!
 //! impl Error for NoNumberError {}
 //!
+//! # #[cfg(feature = "std")]
 //! fn foo(num: Option<&str>) -> Result<i32, Exun<&str, ParseIntError>> {
 //!     // we expect it possible to not get a number, so we handle it as such
 //!     let num = match num {
@@ -150,19 +154,12 @@ pub use result::ResultErrorExt;
 
 #[cfg(feature = "alloc")]
 pub use result::ResultMsgExt;
-#[cfg(feature = "alloc")]
-pub use unexpected::{RawUnexpected, UnexpectedError};
 
 pub use crate::exun::Exun;
 pub use result::ResultExunExt;
+pub use unexpected::{RawUnexpected, UnexpectedError};
 pub use Exun::{Expected, Unexpected};
 
 /// A type alias for [`Exun<E, RawUnexpected>`]
 #[cfg(feature = "alloc")]
 pub type Expect<E> = Exun<E, RawUnexpected>;
-
-/// A type alias for [`Result<T, RawUnexpected>`]
-///
-/// [`Result<T, RawUnexpected>`]: std::result::Result
-#[cfg(feature = "alloc")]
-pub type Result<T> = core::result::Result<T, RawUnexpected>;

@@ -1,7 +1,9 @@
 use core::fmt::{self, Debug, Display};
 
-#[cfg(not(feature = "std"))]
+#[cfg(all(feature = "alloc", not(feature = "std")))]
 use alloc::boxed::Box;
+#[cfg(all(feature = "alloc", not(feature = "std")))]
+use alloc::string::String;
 
 #[cfg(feature = "std")]
 use std::error::Error;
@@ -12,6 +14,7 @@ impl<T: Display + Debug + Send + Sync + ?Sized> Errorable for T {}
 #[derive(Debug)]
 enum ErrorTy {
 	None,
+	#[cfg(feature = "alloc")]
 	Message(Box<dyn Errorable + 'static>),
 	#[cfg(feature = "std")]
 	Error(Box<dyn Error + Send + Sync + 'static>),
@@ -32,6 +35,7 @@ impl Display for RawUnexpected {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match &self.internal {
 			ErrorTy::None => Display::fmt("Called `unexpect` on a `None` value", f),
+			#[cfg(feature = "alloc")]
 			ErrorTy::Message(m) => Display::fmt(&m, f),
 			#[cfg(feature = "std")]
 			ErrorTy::Error(e) => Display::fmt(&e, f),
@@ -79,6 +83,7 @@ impl RawUnexpected {
 	///
 	/// let x = RawUnexpected::msg("failed");
 	/// ```
+	#[cfg(feature = "alloc")]
 	#[must_use]
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
 		Self {
@@ -126,6 +131,7 @@ impl RawUnexpected {
 	pub fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match &self.internal {
 			ErrorTy::None => None,
+			#[cfg(feature = "alloc")]
 			ErrorTy::Message(_) => None,
 			#[cfg(feature = "std")]
 			ErrorTy::Error(e) => Some(&**e),
@@ -171,6 +177,7 @@ impl UnexpectedError {
 	///
 	/// let x = UnexpectedError::msg("failed");
 	/// ```
+	#[cfg(feature = "alloc")]
 	#[must_use]
 	pub fn msg<E: Display + Debug + Send + Sync + 'static>(error: E) -> Self {
 		Self(RawUnexpected::msg(error))
@@ -200,12 +207,14 @@ impl From<RawUnexpected> for UnexpectedError {
 	}
 }
 
+#[cfg(feature = "alloc")]
 impl From<&'static str> for UnexpectedError {
 	fn from(value: &'static str) -> Self {
 		Self(RawUnexpected::msg(value))
 	}
 }
 
+#[cfg(feature = "alloc")]
 impl From<String> for UnexpectedError {
 	fn from(value: String) -> Self {
 		Self(RawUnexpected::msg(value))

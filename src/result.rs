@@ -66,14 +66,14 @@ impl<T, E: Error + Send + Sync + 'static> ResultErrorExt<T> for Result<T, E> {
 	}
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "std")]
 impl<T> ResultErrorExt<T> for Result<T, RawUnexpected> {
 	fn unexpect(self) -> Self {
 		self
 	}
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "std")]
 impl<T> ResultErrorExt<T> for Option<T> {
 	fn unexpect(self) -> Result<T, RawUnexpected> {
 		self.ok_or_else(RawUnexpected::none)
