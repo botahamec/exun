@@ -5,8 +5,8 @@ don't want our programs to panic because of that. We also don't want to spend
 so much time handling unexpected errors. That's what this crate is for. You
 keep your unexpected errors, and don't worry about them until later.
 
-* This crate works in `no-std`, although most features (besides `Exun`) require
-`alloc`.
+* This crate works in `no-std`. Some extra features come if `alloc` or `std` is
+used.
 
 * `Exun` is an error type. It'll hold on to your `Unexpected` error if you have
 one, so you can figure out what to do with it later. If the error is
@@ -31,7 +31,7 @@ For standard features:
 ```toml
 [dependencies]
 # ...
-exun = "0.1"
+exun = "0.2"
 ```
 
 The following features are enabled by default:
@@ -41,15 +41,16 @@ library's `Error` type. Using this type allows more errors to be converted
 into `Exun` and `RawUnexpected` errors automatically, and it's needed for
 `Result::unexpect`.
 
-* `alloc`: This is needed for `Expect`, `RawUnexpected` and
-`UnexpectedError`, as well as `Result::unexpected_msg`.
+* `alloc`: This is needed for `RawUnexpected` and `UnexpectedError` to hold
+string messages. This can be done with `Result::unexpect_mshg`. Without this,
+only the equivalent of `Result::unexpect_none` can be constructed.
 
 To disable these features:
 
 ```toml
 [dependencies]
 # ...
-exun = { version = "0.1", default-features = false }
+exun = { version = "0.2", default-features = false }
 ```
 
 If you'd like to use `alloc` but not `std`:
@@ -57,7 +58,7 @@ If you'd like to use `alloc` but not `std`:
 ```toml
 [dependencies]
 # ...
-exun = { version = "0.1", default-features = false, features = ["alloc"] }
+exun = { version = "0.2", default-features = false, features = ["alloc"] }
 ```
 
 ## Examples
@@ -68,6 +69,16 @@ use exun::*;
 fn foo(num: &str) -> Result<i32, RawUnexpected> {
     // we use `unexpect` to indicate that we don't expect this error to occur
     let num = num.parse::<i32>().unexpect()?;
+    Ok(num)
+}
+```
+
+```rust
+use exun::*;
+
+fn first(list: &[i32]) -> Result<i32, RawUnexpected> {
+    // for options, the `unexpect_none` method can be used
+    let num = list.get(0).unexpect_none()?;
     Ok(num)
 }
 ```
