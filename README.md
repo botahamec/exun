@@ -42,7 +42,7 @@ into `Exun` and `RawUnexpected` errors automatically, and it's needed for
 `Result::unexpect`.
 
 * `alloc`: This is needed for `RawUnexpected` and `UnexpectedError` to hold
-string messages. This can be done with `Result::unexpect_mshg`. Without this,
+string messages. This can be done with `Result::unexpect_msg`. Without this,
 only the equivalent of `Result::unexpect_none` can be constructed.
 
 To disable these features:
